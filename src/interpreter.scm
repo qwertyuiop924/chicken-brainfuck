@@ -1,20 +1,69 @@
 (declare (uses tokenizer))
 (declare (uses parser))
+(require-extension vector-lib) ; vectors
 (use extras) ; read-line
 
 ; This is our memory memory, a collection of buckets, each bucket has numbers.
-;(define data (vector-unfold (lambda (n) 0) 100))
-;(define current-position   0) ; Start at bucket 0
-;(define current-loop-index 0) ; [ was opened in a bucket, store bucket number
-;
-;(define (advance)
-;  (set! current-position (+ 1 (current-position))))
-;
-;(define (current-value)
-;  (vector-ref data current-position))
+(define data (vector-unfold (lambda (n) 0) 100))
+(define current-position   0) ; Start at bucket 0
+
+(define (current-value)
+  (vector-ref data current-position))
+
+(define (current-value-set! value)
+  (vector-set! data current-position value))
+
+; Evaluators
+; ----------------------------------------------------------------------------
+(define (advance node)
+  (set! current-position (+ 1 (current-position))))
+
+(define (back node)
+  (set! current-position (+ 1 (current-position))))
+
+(define (decrement node)
+  (current-value-set! (- (current-value) 1)))
+
+(define (increment node)
+  (current-value-set! (+ 1 (current-value))))
+
+(define (output node)
+  (print (current-value))) ; TODO: Print as char
+
+(define (input node)
+  (current-value-set! (read-line)))
+
+(define (while node)
+  (let ((bucket-position current-position)
+        (statements (cadr node)))
+    (if (not (equal? 0 (vector-ref data bucket-position)))
+      (begin
+        (eval-ast statements)
+        (while node)))))
+; ----------------------------------------------------------------------------
+
+(define (eval-node node)
+  (let* ((type (cdar node))
+        (evaluators '(
+                      (DECREMENT . decrement)
+                      (INCREMENT . increment)
+                      (ADVANCE   . advance)
+                      (BACK      . back)
+                      (OUTPUT    . output)
+                      (INPUT     . input)
+                      (WHILE     . while)
+                      ))
+        (fn-name (cdr (assoc type evaluators))))
+    (apply (eval fn-name) (list node))))
+
+(define (eval-ast ast)
+  (if (not (null? ast))
+    (begin
+      (eval-node (car ast))
+      (eval-ast  (cdr ast)))))
 
 (define (eval-brainfuck input)
-  (parse (tokenize input)))
+  (eval-ast (parse (tokenize input))))
 
 (define (read-brainfuck)
   (begin
@@ -23,7 +72,7 @@
 
 (define (repl)
   (begin
-    (print (eval-brainfuck (read-brainfuck)))
+    (eval-brainfuck (read-brainfuck))
     (repl)))
 
 (repl)

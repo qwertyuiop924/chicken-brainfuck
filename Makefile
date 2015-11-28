@@ -1,8 +1,9 @@
-all: brainfuck
+all: clean brainfuck
 
 brainfuck: interpreter.o parser.o tokenizer.o string_helpers.o
-	csc -o brainfuck build/interpreter.o build/parser.o build/tokenizer.o \
-	  build/string_helpers.o
+	csc -o build/brainfuck build/interpreter.o build/parser.o \
+	  build/tokenizer.o build/string_helpers.o
+	@echo "Done! Built exectable at: ./build/brainfuck"
 
 parser.o: src/parser.scm
 	csc -c src/parser.scm -o build/parser.o
@@ -17,4 +18,5 @@ string_helpers.o: src/string_helpers.scm
 	csc -c src/string_helpers.scm -o build/string_helpers.o
 
 clean:
-	rm build/*
+	rm -rf build
+	mkdir build

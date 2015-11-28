@@ -1,4 +1,5 @@
 (declare (unit string-helpers))
+(require-extension srfi-13) ; string goodies
 
 (define (string-tail str)
   (let ((chars (string->list str)))
