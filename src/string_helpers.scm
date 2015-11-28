@@ -1,3 +1,5 @@
+; Just some helpers for playing with strings
+;
 (declare (unit string-helpers))
 (require-extension srfi-13) ; string goodies
 
