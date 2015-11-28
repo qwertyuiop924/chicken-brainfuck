@@ -25,7 +25,7 @@
       ((equal? "[" head) 
         (cons 'BRACKET_OPEN (tokenize tail)))
       ((equal? "]" head) 
-        (cons 'BRACKET_CLOSE(tokenize tail)))
+        (cons 'BRACKET_CLOSE (tokenize tail)))
       ; Ignore all other characters
       (else 
         (tokenize tail)))))
