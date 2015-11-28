@@ -5,9 +5,13 @@ This is an interactive interpreter for the
 ## Usage
 Simple enough. Just execute the generated `build/brainfuck` executable.
 
-## Compile
-To compile, you'll need the CHICKEN Scheme compiler, then just run `make`.
+## Build from source
+To build, you'll need the [CHICKEN Scheme](http://code.call-cc.org/) compiler.
+Just follow the instructions, get the compiler, navigate to the repo and run
+`make`.
+
+Done! Your interpreter lives in `build/brainfuck`. This has only been tested on
+Linux (openSUSE Leap).
 
 ## TODO
-There are still many things pending. For example, right now it prints the
-integer value instead of a character value.
+ * `reset` function maybe? Just something to type and be able to reset the state

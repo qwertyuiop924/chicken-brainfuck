@@ -1,3 +1,11 @@
+; BRAINFUCK INTERPRETER
+; This is a simple brainfuck interpreter. For information on the language
+; see: https://en.wikipedia.org/wiki/Brainfuck
+;
+; It's implemented using a typical `tokenizer -> parser -> interpreter` chain.
+;
+; Author: Federico Ramirez <fedra.arg@gmail.com>
+; URL: https://github.com/gosukiwi/chicken-brainfuck
 (declare (uses tokenizer))
 (declare (uses parser))
 (require-extension vector-lib) ; vectors
@@ -5,7 +13,8 @@
 
 ; This is our memory memory, a collection of buckets, each bucket has numbers.
 (define data (vector-unfold (lambda (n) 0) 100))
-(define current-position   0) ; Start at bucket 0
+; Start at bucket 0
+(define current-position 0) 
 
 (define (current-value)
   (vector-ref data current-position))
@@ -16,10 +25,10 @@
 ; Evaluators
 ; ----------------------------------------------------------------------------
 (define (advance node)
-  (set! current-position (+ 1 (current-position))))
+  (set! current-position (+ 1 current-position)))
 
 (define (back node)
-  (set! current-position (+ 1 (current-position))))
+  (set! current-position (- current-position 1)))
 
 (define (decrement node)
   (current-value-set! (- (current-value) 1)))
@@ -28,7 +37,7 @@
   (current-value-set! (+ 1 (current-value))))
 
 (define (output node)
-  (print (current-value))) ; TODO: Print as char
+  (format #t "~A" (integer->char (current-value))))
 
 (define (input node)
   (current-value-set! (read-line)))
