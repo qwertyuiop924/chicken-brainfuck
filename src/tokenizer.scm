@@ -1,7 +1,9 @@
+; This is the tokenizer. The main function is `tokenize` which takes an input
+; and returns a list of tokens. It ignores non-valid tokens.
+;
 (declare (unit tokenizer))
 (declare (uses string-helpers))
 
-; Let's tokenize BRAINFUCK
 (define (tokenize input)
   (let ((head (string-head input))
         (tail (string-tail input)))
@@ -27,5 +29,3 @@
       ; Ignore all other characters
       (else 
         (tokenize tail)))))
-
-;(tokenize "><n>asd")
