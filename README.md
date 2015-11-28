@@ -13,8 +13,7 @@ Just follow the instructions, get the compiler, navigate to the repo and run
 ```
 git clone git@github.com:gosukiwi/chicken-brainfuck.git
 cd chicken-brainfuck
-make
-build/brainfuck
+make && build/brainfuck
 Welcome to CHICKEN Brainfuck!
 brainfuck>
 ```
