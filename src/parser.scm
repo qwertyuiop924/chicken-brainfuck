@@ -30,29 +30,29 @@
 
 ; Parsers --------------------------------------------------------------------
 (define (parse-increment tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . INCREMENT)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . INCREMENT)) ast)))
 
 (define (parse-decrement tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . DECREMENT)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . DECREMENT)) ast)))
 
 (define (parse-advance tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . ADVANCE)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . ADVANCE)) ast)))
 
 (define (parse-back tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . BACK)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . BACK)) ast)))
 
 (define (parse-output tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . OUTPUT)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . OUTPUT)) ast)))
 
 (define (parse-input tokens ast)
-  (tokens->ast (cdr tokens) (cons '((type . INPUT)) ast)))
+  (parse-statement (cdr tokens) (cons '((type . INPUT)) ast)))
 
 (define (parse-while tokens ast)
   (let* ((inside-tokens    (parse-while-body (cdr tokens) '()))
-         (statements       (tokens->ast inside-tokens '()))
+         (statements       (parse-statement inside-tokens '()))
          (node             (list '(type . WHILE) statements))
          (remaining-tokens (remove-first (cdr tokens) (+ 1 (length inside-tokens)))))
-    (tokens->ast remaining-tokens (cons node ast))))
+    (parse-statement remaining-tokens (cons node ast))))
 
 (define (parse-while-body tokens statements)
   (cond 
@@ -60,12 +60,11 @@
      (reverse statements))
     (else
       (parse-while-body (cdr tokens) (cons (car tokens) statements)))))
-; ----------------------------------------------------------------------------
 
-; Given some tokens, and an AST (which starts as an empty list), find a parser
-; using a single look-ahead and apply that parser to the tokens. The parser is
-; in charge of returning the ast.
-(define (tokens->ast tokens ast)
+; Initial parser. Given some tokens, and an AST (which starts as an empty
+; list), call parsers using a single look-ahead and apply that parser to the
+; tokens. The parser might call other parsers before returning the ast.
+(define (parse-statement tokens ast)
   (if (null? tokens) 
     (reverse ast)
     (let ((lookahead (car tokens)))
@@ -85,7 +84,8 @@
              (parse-while tokens ast))
             (else 
               (print "Invalid token:" lookahead))))))
+; ----------------------------------------------------------------------------
 
-; Prettier version of `tokens->ast`
+; Prettier version of `parse-statement`
 (define (parse tokens)
-  (tokens->ast tokens '()))
+  (parse-statement tokens '()))
