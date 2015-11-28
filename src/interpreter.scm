@@ -82,8 +82,9 @@
 
 (define (repl)
   (begin
-    (print "Welcome to CHICKEN Brainfuck!")
     (eval-brainfuck (read-brainfuck))
     (repl)))
 
-(repl)
+(begin 
+  (print "Welcome to CHICKEN Brainfuck!")
+  (repl))
