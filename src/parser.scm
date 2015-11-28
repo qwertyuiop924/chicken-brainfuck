@@ -2,7 +2,7 @@
 ; a list of tokens and builds an AST with the format:
 ;
 ; (DECREMENT)                            -> (((type . DECREMENT)))
-; (DECREMENT INCREMENT)                  -> (((type . INCREMENT)) ((type . DECREMENT)))
+; (INCREMENT DECREMENT)                  -> (((type . INCREMENT)) ((type . DECREMENT)))
 ; (BRACKET_OPEN INCREMENT BRACKET_CLOSE) -> (((type . WHILE) (((type . INCREMENT)) ((type . BACK)))) ((type . DECREMENT)))
 ;
 ; Each node is represented by a list. The first item of that list is always a
