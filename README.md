@@ -1,6 +1,6 @@
 # CHICKEN Brainfuck
 This is an interactive interpreter for the 
-[Brainfuck](https://es.wikipedia.org/wiki/Brainfuck) programming language.
+[Brainfuck](https://en.wikipedia.org/wiki/Brainfuck) programming language.
 
 ## Usage
 Simple enough. Just execute the generated `build/brainfuck` executable.
