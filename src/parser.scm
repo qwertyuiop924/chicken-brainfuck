@@ -48,18 +48,18 @@
   (tokens->ast (cdr tokens) (cons '((type . INPUT)) ast)))
 
 (define (parse-while tokens ast)
-  (let* ((inside-tokens    (parse-while-statements (cdr tokens) '()))
+  (let* ((inside-tokens    (parse-while-body (cdr tokens) '()))
          (statements       (tokens->ast inside-tokens '()))
          (node             (list '(type . WHILE) statements))
          (remaining-tokens (remove-first (cdr tokens) (+ 1 (length inside-tokens)))))
     (tokens->ast remaining-tokens (cons node ast))))
 
-(define (parse-while-statements tokens statements)
+(define (parse-while-body tokens statements)
   (cond 
     ((or (null? tokens) (equal? 'BRACKET_CLOSE (car tokens))) 
      (reverse statements))
     (else
-      (parse-while-statements (cdr tokens) (cons (car tokens) statements)))))
+      (parse-while-body (cdr tokens) (cons (car tokens) statements)))))
 ; ----------------------------------------------------------------------------
 
 ; Given some tokens, and an AST (which starts as an empty list), find a parser
