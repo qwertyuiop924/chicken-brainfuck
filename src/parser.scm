@@ -83,7 +83,7 @@
             ((equal? 'BRACKET_OPEN lookahead)
              (parse-while tokens ast))
             (else 
-              (print "Invalid token:" lookahead))))))
+              (print "Not a statement. Invalid token: " lookahead))))))
 ; ----------------------------------------------------------------------------
 
 ; Prettier version of `parse-statement`
