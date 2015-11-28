@@ -48,18 +48,19 @@
   (parse-statement (cdr tokens) (cons '((type . INPUT)) ast)))
 
 (define (parse-while tokens ast)
-  (let* ((inside-tokens    (parse-while-body (cdr tokens) '()))
+  (let* ((inside-tokens    (match-while-body (cdr tokens) '()))
          (statements       (parse-statement inside-tokens '()))
          (node             (list '(type . WHILE) statements))
          (remaining-tokens (remove-first (cdr tokens) (+ 1 (length inside-tokens)))))
     (parse-statement remaining-tokens (cons node ast))))
 
-(define (parse-while-body tokens statements)
+; Matches the body of a WHILE, which is all tokens until a ]
+(define (match-while-body tokens statements)
   (cond 
     ((or (null? tokens) (equal? 'BRACKET_CLOSE (car tokens))) 
      (reverse statements))
     (else
-      (parse-while-body (cdr tokens) (cons (car tokens) statements)))))
+      (match-while-body (cdr tokens) (cons (car tokens) statements)))))
 
 ; Initial parser. Given some tokens, and an AST (which starts as an empty
 ; list), call parsers using a single look-ahead and apply that parser to the
