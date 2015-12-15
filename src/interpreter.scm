@@ -13,7 +13,7 @@
 (use extras) ; read-line
 
 ; This is our memory memory, a collection of buckets, each bucket has numbers.
-(define data (vector-unfold (lambda (n) 0) 100))
+(define data (make-vector 100 0))
 ; Start at bucket 0
 (define current-position 0) 
 
@@ -28,6 +28,10 @@
 (define (advance node)
   (set! current-position (+ 1 current-position)))
 
+(define (cleanup node)
+  (vector-map! (lambda (i x) 0) data))
+                     
+
 (define (back node)
   (set! current-position (- current-position 1)))
 
@@ -41,7 +45,7 @@
   (format #t "~A" (integer->char (current-value))))
 
 (define (input node)
-  (current-value-set! (read-line)))
+  (current-value-set! (char->integer (read-char))))
 
 (define (while node)
   (let ((bucket-position current-position)
@@ -54,17 +58,16 @@
 
 (define (eval-node node)
   (let* ((type (cdar node))
-        (evaluators '(
-                      (DECREMENT . decrement)
-                      (INCREMENT . increment)
-                      (ADVANCE   . advance)
-                      (BACK      . back)
-                      (OUTPUT    . output)
-                      (INPUT     . input)
-                      (WHILE     . while)
-                      ))
-        (fn-name (cdr (assoc type evaluators))))
-    (apply (eval fn-name) (list node))))
+         (evaluators `((DECREMENT . ,decrement)
+                       (INCREMENT . ,increment)
+                       (ADVANCE   . ,advance)
+                       (BACK      . ,back)
+                       (OUTPUT    . ,output)
+                       (INPUT     . ,input)
+                       (WHILE     . ,while)
+                       (CLEANUP   . ,cleanup)))
+         (fn (cdr (assoc type evaluators))))
+    (apply fn (list node))))
 
 (define (eval-ast ast)
   (if (not (null? ast))
