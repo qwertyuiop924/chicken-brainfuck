@@ -12,8 +12,9 @@
 (require-extension vector-lib) ; vectors
 (use extras) ; read-line
 
+(define DATA-SIZE 100)
 ; This is our memory memory, a collection of buckets, each bucket has numbers.
-(define data (make-vector 100 0))
+(define data (make-vector DATA-SIZE 0))
 ; Start at bucket 0
 (define current-position 0) 
 
@@ -26,14 +27,14 @@
 ; Evaluators
 ; ----------------------------------------------------------------------------
 (define (advance node)
-  (set! current-position (+ 1 current-position)))
+  (set! current-position (modulo (+ 1 current-position) DATA-SIZE)))
 
 (define (cleanup node)
   (vector-map! (lambda (i x) 0) data))
                      
 
 (define (back node)
-  (set! current-position (- current-position 1)))
+  (set! current-position (modulo (- current-position 1) DATA-SIZE)))
 
 (define (decrement node)
   (current-value-set! (- (current-value) 1)))
@@ -50,10 +51,9 @@
 (define (while node)
   (let ((bucket-position current-position)
         (statements (cadr node)))
-    (if (not (equal? 0 (vector-ref data bucket-position)))
-      (begin
+    (unless (equal? 0 (vector-ref data bucket-position))
         (eval-ast statements)
-        (while node)))))
+        (while node))))
 ; ----------------------------------------------------------------------------
 
 (define (eval-node node)
@@ -70,23 +70,20 @@
     (apply fn (list node))))
 
 (define (eval-ast ast)
-  (if (not (null? ast))
-    (begin
+  (unless (null? ast)
       (eval-node (car ast))
-      (eval-ast  (cdr ast)))))
+      (eval-ast  (cdr ast))))
 
 (define (eval-brainfuck input)
   (eval-ast (parse (tokenize input))))
 
 (define (read-brainfuck)
-  (begin
     (format #t "brainfuck> ")
-    (read-line)))
+    (read-line))
 
 (define (repl)
-  (begin
     (eval-brainfuck (read-brainfuck))
-    (repl)))
+    (repl))
 
 (begin 
   (print "Welcome to CHICKEN Brainfuck!")
