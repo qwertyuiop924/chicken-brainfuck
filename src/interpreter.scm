@@ -31,7 +31,6 @@
 
 (define (cleanup node)
   (vector-map! (lambda (i x) 0) data))
-                     
 
 (define (back node)
   (set! current-position (modulo (- current-position 1) DATA-SIZE)))

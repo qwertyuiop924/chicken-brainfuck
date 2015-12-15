@@ -32,6 +32,9 @@
 (define (parse-increment tokens ast)
   (parse-statement (cdr tokens) (cons '((type . INCREMENT)) ast)))
 
+(define (parse-cleanup tokens ast)
+  (parse-statement (cdr tokens) (cons '((type . CLEANUP)) ast)))
+
 (define (parse-decrement tokens ast)
   (parse-statement (cdr tokens) (cons '((type . DECREMENT)) ast)))
 
@@ -83,6 +86,8 @@
              (parse-input tokens ast))
             ((equal? 'BRACKET_OPEN lookahead)
              (parse-while tokens ast))
+            ((equal? 'PERCENT lookahead)
+             (parse-cleanup tokens ast))
             (else 
               (print "Not a statement. Invalid token: " lookahead))))))
 ; ----------------------------------------------------------------------------
