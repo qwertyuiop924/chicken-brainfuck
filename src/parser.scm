@@ -18,7 +18,7 @@
 ;; ocurred.
 ;;
 (declare (unit parser))
-
+(use srfi-1 anaphora);assoc and acond goodness
 ;; Utility function. Removes the first `n` elements from `lst`.
 (define (remove-first lst n)
   (cond ((null? lst) 
@@ -68,6 +68,18 @@
     (else
       (match-while-body (cdr tokens) (cons (car tokens) statements)))))
 
+(define PARSER-MAP ;a map of tokens to parse functions
+  `((PLUS         . ,parse-increment)
+    (MINUS        . ,parse-decrement)
+    (GREATER_THAN . ,parse-advance)
+    (SMALLER_THAN . ,parse-back)
+    (DOT          . ,parse-output)
+    (COMMA        . ,parse-input)
+    (BRACKET_OPEN . ,parse-while)
+    (PERCENT      . ,parse-cleanup)
+    (EOF          . ,parse-escape)
+    (BANG         . ,parse-escape)))
+
 ;; Initial parser. Given some tokens, and an AST (which starts as an empty
 ;; list), call parsers using a single look-ahead and apply that parser to the
 ;; tokens. The parser might call other parsers before returning the ast.
@@ -75,25 +87,8 @@
   (if (null? tokens) 
     (reverse ast)
     (let ((lookahead (car tokens)))
-      (cond ((equal? 'PLUS lookahead)
-             (parse-increment tokens ast))
-            ((equal? 'MINUS lookahead)
-             (parse-decrement tokens ast))
-            ((equal? 'GREATER_THAN lookahead)
-             (parse-advance tokens ast))
-            ((equal? 'SMALLER_THAN lookahead)
-             (parse-back tokens ast))
-            ((equal? 'DOT lookahead)
-             (parse-output tokens ast))
-            ((equal? 'COMMA lookahead)
-             (parse-input tokens ast))
-            ((equal? 'BRACKET_OPEN lookahead)
-             (parse-while tokens ast))
-            ((equal? 'PERCENT lookahead)
-             (parse-cleanup tokens ast))
-            ((or (equal? 'EOF lookahead)
-                 (equal? 'BANG lookahead))
-             (parse-escape tokens ast))
+      (acond ((assoc lookahead PARSER-MAP)
+              ((cdr it) tokens ast))
             (else 
               (print "Not a statement. Invalid token: " lookahead))))))
 ; ----------------------------------------------------------------------------
