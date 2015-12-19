@@ -1,4 +1,5 @@
 # CHICKEN Brainfuck
+NOTE: this version requires both vector-lib, and anaphora.
 This is my fork of the CHICKEN brainfuck interpreter by gosukiwi.
 I'm cleaning it up a bit, but it basically has the same structure of the original.
 Below is the original README.
