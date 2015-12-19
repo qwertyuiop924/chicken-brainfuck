@@ -3,35 +3,30 @@
 
 (declare (unit tokenizer))
 (declare (uses string-helpers))
+(use srfi-1 srfi-13 anaphora);string-null?, acond and assoc
+
+(define TOKEN-MAP
+  '((">" . GREATER_THAN)
+    ("<" . SMALLER_THAN)
+    ("+" . PLUS)
+    ("-" . MINUS)
+    ("." . DOT)
+    ("," . COMMA)
+    ("[" . BRACKET_OPEN)
+    ("]" . BRACKET_CLOSE)
+    ("%" . PERCENT)
+    ("!" . BANG)))
 
 (define (tokenize input)
   (if (eof-object? input)
       '(EOF)
       (let ((head (string-head input))
             (tail (string-tail input)))
-        (cond
+        (acond
          ((string-null? head)
           '())
-         ((equal? ">" head) 
-          (cons 'GREATER_THAN (tokenize tail)))
-         ((equal? "<" head) 
-          (cons 'SMALLER_THAN (tokenize tail)))
-         ((equal? "+" head) 
-          (cons 'PLUS (tokenize tail)))
-         ((equal? "-" head) 
-          (cons 'MINUS (tokenize tail)))
-         ((equal? "." head) 
-          (cons 'DOT (tokenize tail)))
-         ((equal? "," head) 
-          (cons 'COMMA (tokenize tail)))
-         ((equal? "[" head) 
-          (cons 'BRACKET_OPEN (tokenize tail)))
-         ((equal? "]" head) 
-          (cons 'BRACKET_CLOSE (tokenize tail)))
-         ((equal? "%" head)
-          (cons 'PERCENT (tokenize tail)))
-         ((equal? "!" head)
-          (cons 'BANG (tokenize tail)))
+         ((assoc head TOKEN-MAP)
+          (cons (cdr it) (tokenize tail)))
          (else ;Ignore all other characters 
           (tokenize tail))))))
       
