@@ -1,0 +1,16 @@
+(remove-file* "build");ensure clean build environment 
+(remove-file* "brainfuck")
+(create-directory/parents "build")
+(compile -c src/string-helpers.scm -o build/string-helpers.o)
+(compile -c src/tokenizer.scm -o build/tokenizer.o)
+(compile -c src/parser.scm -o build/parser.o)
+(compile -c src/interpreter -o build/interpreter.o)
+(compile -o build/brainfuck
+         build/string-helpers.o
+         build/tokenizer.o
+         build/parser.o
+         build/interpreter.o)
+(move-file "build/brainfuck" "brainfuck")
+(install-program 'chicken-brainfuck "brainfuck")
+(remove-file* "build")
+(remove-file* "brainfuck")

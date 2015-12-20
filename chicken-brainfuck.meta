@@ -1,0 +1,5 @@
+((author "Federico Ramirez <fedra.arg@gmail.com>")
+ (synopsis "A brainfuck interpreter. Written in CHICKEN. That's about it, really")
+ (maintainer "Joshua Barrett <jbarrett186@gamil.com>")
+ (category tools)
+ (depends vector-lib anaphora))
