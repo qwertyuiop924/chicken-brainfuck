@@ -2,28 +2,34 @@
 NOTE: this version requires both vector-lib, and anaphora.
 This is my fork of the CHICKEN brainfuck interpreter by Federico Ramirez, aka gosukiwi.
 I'm cleaning it up a bit, but it basically has the same structure of the original.
-Below is the original README.
 This is an interactive interpreter for the 
 [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck) programming language.
 
 ## Usage
-Simple enough. Just execute the generated `build/brainfuck` executable.
+Simple enough. Just execute the `/usr/bin/brainfuck` executable.
 
 ## Build from source
 To build, you'll need the [CHICKEN Scheme](http://code.call-cc.org/) compiler.
 Just follow the instructions, get the compiler, navigate to the repo and run
-`make`.
+`chicken-install -s`.
 
 ```
-git clone git@github.com:gosukiwi/chicken-brainfuck.git
+git clone git@github.com:qwertyuiop924/chicken-brainfuck.git
 cd chicken-brainfuck
-make && build/brainfuck
+chicken-install && brainfuck
 Welcome to CHICKEN Brainfuck!
 brainfuck>
 ```
 
-Done! Your interpreter lives in `build/brainfuck`. This has only been tested on
-Linux (openSUSE Leap).
+Done! Your interpreter lives in `/usr/bin/brainfuck` (or possibly elsewhere,
+depending on how your chicken install has been configured).
+This has only been tested on Linux (Archlinux, with chicken 4.10.0).
+
+##Non-standard Syntax
+ *`%` sets all cells to 0
+ *`!` exits, returning zero
 
 ## TODO
- * `reset` function maybe? Just something to type and be able to reset the state (done in this fork)
+ * ~~`reset` function maybe? Just something to type and be able to reset the state~~ 
+ * add support for script running
+ * add support for brainfork extensions (when running a script)
