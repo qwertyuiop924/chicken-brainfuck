@@ -1,6 +1,6 @@
 (remove-file* "build");ensure clean build environment 
 (remove-file* "brainfuck")
-(create-directory/parents "build")
+(run (mkdir build))
 (run (sudo chmod 777 build))
 (compile -c src/string-helpers.scm -o build/string-helpers.o)
 (compile -c src/tokenizer.scm -o build/tokenizer.o)
