@@ -1,6 +1,6 @@
 # CHICKEN Brainfuck
 NOTE: this version requires both vector-lib, and anaphora.
-This is my fork of the CHICKEN brainfuck interpreter by gosukiwi.
+This is my fork of the CHICKEN brainfuck interpreter by Federico Ramirez, aka gosukiwi.
 I'm cleaning it up a bit, but it basically has the same structure of the original.
 Below is the original README.
 This is an interactive interpreter for the 
@@ -26,4 +26,4 @@ Done! Your interpreter lives in `build/brainfuck`. This has only been tested on
 Linux (openSUSE Leap).
 
 ## TODO
- * `reset` function maybe? Just something to type and be able to reset the state
+ * `reset` function maybe? Just something to type and be able to reset the state (done in this fork)
